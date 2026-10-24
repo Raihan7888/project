@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Healthy AI
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                H
+            </div>
+
+            <div>
+                <strong>
+                    Healthy AI
+                </strong>
+
+                <span>
+                    Skin Screening Lab
+                </span>
+            </div>
+
+        </div>
+
+        <nav>
+
+            <a
+                href="#dashboard"
+                class="nav-item active"
+            >
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a
+                href="#history"
+                class="nav-item"
+            >
+                <span>◷</span>
+                History
+            </a>
+
+            <a
+                href="#methodology"
+                class="nav-item"
+            >
+                <span>◎</span>
+                Methodology
+            </a>
+
+            <a
+                href="#about"
+                class="nav-item"
+            >
+                <span>ⓘ</span>
+                About
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <div class="privacy-box">
+
+                <span class="privacy-dot"></span>
+
+                <div>
+
+                    <strong>
+                        Local inference
+                    </strong>
+
+                    <small>
+                        Image processing happens
+                        in your browser.
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div>
+
+                <div class="eyebrow">
+                    COMPUTER VISION • HAM10000
+                </div>
+
+                <h1>
+                    Healthy AI
+                </h1>
+
+                <p>
+                    Local skin-lesion image
+                    classification research dashboard.
+                </p>
+
+            </div>
+
+            <div
+                id="modelStatus"
+                class="status-pill"
+            >
+                Checking model...
+            </div>
+
+        </header>
+
+
+        <div
+            id="errorBox"
+            class="error-box hidden"
+        ></div>
+
+
+        <section
+            id="dashboard"
+            class="grid two"
+        >
+
+            <div class="card upload-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="section-label">
+                            STEP 01
+                        </span>
+
+                        <h2>
+                            Upload an image
+                        </h2>
+
+                    </div>
+
+                    <span class="mini-tag">
+                        224 × 224
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="dropZone"
+                    class="drop-zone"
+                >
+
+                    <input
+                        id="imageInput"
+                        type="file"
+                        accept=".jpg,.jpeg,.png,.webp,image/*"
+                        hidden
+                    >
+
+                    <div class="upload-icon">
+                        ↑
+                    </div>
+
+                    <h3>
+                        Drop a dermatoscopic image here
+                    </h3>
+
+                    <p>
+                        or select an image from your computer
+                    </p>
+
+                    <label
+                        for="imageInput"
+                        class="secondary-button"
+                    >
+                        Choose image
+                    </label>
+
+                    <img
+                        id="preview"
+                        class="preview"
+                        alt="Selected image preview"
+                    >
+
+                </div>
+
+
+                <div class="button-row">
+
+                    <button
+                        id="analyzeBtn"
+                        class="primary-button"
+                        disabled
+                    >
+                        Analyze image
+                    </button>
+
+                    <button
+                        id="clearBtn"
+                        class="secondary-button"
+                    >
+                        Clear
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <div class="card result-card">
+
+                <div class="card-header">
+
+                    <div>
+
+                        <span class="section-label">
+                            STEP 02
+                        </span>
+
+                        <h2>
+                            Model result
+                        </h2>
+
+                    </div>
+
+                    <span
+                        id="band"
+                        class="band neutral"
+                    >
+                        WAITING
+                    </span>
+
+                </div>
+
+
+                <div
+                    id="emptyResult"
+                    class="empty-result"
+                >
+
+                    <div class="empty-icon">
+                        AI
+                    </div>
+
+                    <h3>
+                        Waiting for an image
+                    </h3>
+
+                    <p>
+                        Upload a skin-lesion image and
+                        run the trained MobileNetV2 model.
+                    </p>
+
+                </div>
+
+
+                <div
+                    id="result"
+                    class="hidden"
+                >
+
+                    <div class="result-main">
+
+                        <span class="result-caption">
+                            PREDICTED CLASS
+                        </span>
+
+                        <h2 id="label">
+                            —
+                        </h2>
+
+                        <div class="confidence-line">
+
+                            <span>
+                                Confidence
+                            </span>
+
+                            <strong id="confidence">
+                                0%
+                            </strong>
+
+                        </div>
+
+                        <div class="confidence-track">
+
+                            <div
+                                id="confidenceBar"
+                                class="confidence-fill"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="section-title">
+                        Top model outputs
+                    </div>
+
+                    <div
+                        id="topPredictions"
+                    ></div>
+
+
+                    <div class="uncertainty-box">
+
+                        <strong>
+                            Interpretation guard
+                        </strong>
+
+                        <p id="uncertainty">
+                            —
+                        </p>
+
+                    </div>
+
+
+                    <div class="button-row">
+
+                        <button
+                            id="historyBtn"
+                            class="primary-button"
+                        >
+                            Save result
+                        </button>
+
+                        <button
+                            id="reportBtn"
+                            class="secondary-button"
+                        >
+                            Download PDF
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="stats-grid">
+
+            <div class="card stat">
+
+                <span>
+                    Saved screenings
+                </span>
+
+                <strong id="totalStat">
+                    0
+                </strong>
+
+            </div>
+
+            <div class="card stat">
+
+                <span>
+                    Average confidence
+                </span>
+
+                <strong id="avgStat">
+                    0%
+                </strong>
+
+            </div>
+
+            <div class="card stat">
+
+                <span>
+                    Review outputs
+                </span>
+
+                <strong id="reviewStat">
+                    0
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <section
+            id="history"
+            class="card"
+        >
+
+            <div class="card-header">
+
+                <div>
+
+                    <span class="section-label">
+                        RECORDS
+                    </span>
+
+                    <h2>
+                        Screening history
+                    </h2>
+
+                </div>
+
+                <button
+                    id="clearHistory"
+                    class="danger-button"
+                >
+                    Clear history
+                </button>
+
+            </div>
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                File
+                            </th>
+
+                            <th>
+                                Prediction
+                            </th>
+
+                            <th>
+                                Confidence
+                            </th>
+
+                            <th>
+                                Band
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="historyBody">
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="empty-cell"
+                            >
+                                Loading history...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <section
+            id="methodology"
+            class="card"
+        >
+
+            <div class="card-header">
+
+                <div>
+
+                    <span class="section-label">
+                        METHODOLOGY
+                    </span>
+
+                    <h2>
+                        How Healthy AI works
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="method-list">
+
+                <div>
+
+                    <b>
+                        01 — Dataset
+                    </b>
+
+                    <span>
+                        HAM10000 dermatoscopic
+                        skin-lesion dataset.
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <b>
+                        02 — Preprocessing
+                    </b>
+
+                    <span>
+                        Images are resized to
+                        224 × 224 RGB tensors
+                        with ImageNet normalization.
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <b>
+                        03 — Augmentation
+                    </b>
+
+                    <span>
+                        Flips, rotation, crop and
+                        controlled color augmentation
+                        are used during training.
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <b>
+                        04 — Transfer learning
+                    </b>
+
+                    <span>
+                        MobileNetV2 initialized from
+                        ImageNet weights is fine-tuned
+                        for the seven HAM10000 classes.
+                    </span>
+
+                </div>
+
+                <div>
+
+                    <b>
+                        05 — Browser deployment
+                    </b>
+
+                    <span>
+                        The trained model is exported
+                        to ONNX and statically quantized
+                        for local browser inference.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section
+            id="about"
+            class="card"
+        >
+
+            <div class="card-header">
+
+                <div>
+
+                    <span class="section-label">
+                        IMPORTANT
+                    </span>
+
+                    <h2>
+                        Educational prototype
+                    </h2>
+
+                </div>
+
+            </div>
+
+            <p class="prose">
+
+                Healthy AI is a college machine-learning
+                research project. It classifies images
+                according to patterns learned from the
+                HAM10000 dataset.
+
+                <br><br>
+
+                The prediction and confidence displayed
+                by this application are model outputs.
+                They are not a medical diagnosis or a
+                clinically validated risk score.
+
+                <br><br>
+
+                Suspicious, changing, bleeding or otherwise
+                concerning skin lesions should be evaluated
+                by a qualified healthcare professional.
+
+            </p>
+
+            <div class="notice">
+
+                🔒
+                Images are processed locally by the
+                browser model after the model has been
+                installed. The application does not
+                require a cloud prediction API.
+
+            </div>
+
+        </section>
+
+
+        <footer>
+
+            Healthy AI • MobileNetV2 • HAM10000 •
+            ONNX INT8 • Local Research Prototype
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script
+    src="{{ url_for('static', filename='vendor/ort.min.js') }}"
+></script>
+
+<script
+    src="{{ url_for('static', filename='app.js') }}"
+></script>
+
+</body>
+
+</html>

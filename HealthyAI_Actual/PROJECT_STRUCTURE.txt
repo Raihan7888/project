@@ -1,0 +1,45 @@
+HealthyAI_Actual/
+│
+├── app.py
+├── download_dataset.py
+├── train_model.py
+├── quantize_model.py
+├── prepare_runtime.py
+├── verify_project.py
+│
+├── requirements.txt
+├── README.md
+├── PROJECT_STRUCTURE.txt
+├── .gitignore
+├── setup_windows.bat
+├── run_app.bat
+│
+├── backend/
+│
+├── data/
+│   └── .gitkeep
+│
+├── dataset/
+│   ├── .gitkeep
+│   └── README.txt
+│
+├── model/
+│   ├── .gitkeep
+│   └── README.txt
+│
+├── reports/
+│   └── .gitkeep
+│
+├── ml/
+│   └── dataset.py
+│
+├── static/
+│   ├── app.js
+│   ├── style.css
+│   └── vendor/
+│
+├── templates/
+│   └── index.html
+│
+└── tests/
+    └── test_app.py
